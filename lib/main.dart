@@ -1,4 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:localization_test/app_localizations.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,6 +17,24 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
+      supportedLocales: const [
+        Locale('en', 'US'),
+        Locale('ru', 'RU'),
+      ],
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate
+      ],
+      localeResolutionCallback: (locale, supportedLocales) {
+        for (var supportedLocale in supportedLocales) {
+          if (supportedLocale.languageCode == locale!.languageCode &&
+              supportedLocale.countryCode == locale.countryCode) {
+            return supportedLocale;
+          }
+        }
+        return supportedLocales.first;
+      },
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
@@ -47,11 +68,11 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+            Text(
+              AppLocalizations.of(context)!.translate('first_string'),
             ),
             Text(
-              '$_counter',
+              AppLocalizations.of(context)!.translate('second_string'),
               style: Theme.of(context).textTheme.headline4,
             ),
           ],
